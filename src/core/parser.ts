@@ -2,37 +2,53 @@
  * @Author: saber2pr
  * @Date: 2019-09-23 13:32:48
  * @Last Modified by: saber2pr
- * @Last Modified time: 2019-09-23 13:52:08
+ * @Last Modified time: 2019-09-23 22:46:11
  */
-const count = (str: string, ch: string) =>
-  Array.from(str).reduce((acc, s) => (s === ch ? acc + 1 : acc), 0)
+export const count = (
+  str: string,
+  ch: string,
+  Break: (ch: string) => boolean = () => false
+) =>
+  Array.from(str).reduce<[number, boolean]>(
+    ([acc, isBreak], s) =>
+      Break(s)
+        ? [acc, true]
+        : !isBreak && s === ch
+        ? [acc + 1, isBreak]
+        : [acc, isBreak],
+    [0, false]
+  )[0]
 
-type Node = {
+export type Node = {
   name: string
   children?: Node[]
 }
 
-export const parse = (code: string) => {
-  const lines = code.split("\n").filter(l => l)
-  const root: Node = {
+export const parse = <T extends Node>(
+  code: string,
+  mapper: (node: Node) => T = n => <T>n
+): T => {
+  const lines = code.split("\n")
+  const root = mapper({
     name: "root",
     children: []
-  }
+  })
 
-  let currentParent: Node = null
-  let prevNode = root
+  let currentParent: T = null
+  let prevNode: T = root
   let currentTab = 0
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
-    const tab = count(line, " ")
+  for (const line of lines) {
+    const name = line.trim()
+    if (!name) continue
+    const tab = count(line, " ", ch => ch !== " ")
 
     if (tab > currentTab) {
       currentTab = tab
       currentParent = prevNode
     }
 
-    const node: Node = { name: line.trim() }
+    const node = mapper({ name })
     if (tab === 0) {
       root.children.push(node)
       currentTab = 0
