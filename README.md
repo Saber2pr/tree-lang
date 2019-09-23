@@ -6,7 +6,7 @@
 yarn add @saber2pr/tree-lang
 ```
 
-# Examlpe
+# Example
 
 1. code like this
 
