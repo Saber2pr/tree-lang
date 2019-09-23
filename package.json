@@ -1,0 +1,39 @@
+{
+  "name": "@saber2pr/tree-lang",
+  "version": "0.0.1",
+  "description": "a tree language.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saber2pr/tree-lang.git"
+  },
+  "author": "saber2pr",
+  "license": "ISC",
+  "files": [
+    "lib/core/*",
+    "lib/index.*"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "jest src/test",
+    "start": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.4.3"
+  },
+  "keywords": [
+    "tree",
+    "parser"
+  ],
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  }
+}
