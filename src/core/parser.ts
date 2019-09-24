@@ -2,7 +2,7 @@
  * @Author: saber2pr
  * @Date: 2019-09-23 13:32:48
  * @Last Modified by: saber2pr
- * @Last Modified time: 2019-09-23 22:46:11
+ * @Last Modified time: 2019-09-24 15:51:02
  */
 export const count = (
   str: string,
@@ -19,9 +19,13 @@ export const count = (
     [0, false]
   )[0]
 
-export type Node = {
+const countWS = (line: string) => count(line, " ", ch => ch !== " ")
+
+export interface Node {
   name: string
-  children?: Node[]
+  children?: this[]
+  parent?: this
+  tab?: number
 }
 
 export const parse = <T extends Node>(
@@ -41,7 +45,7 @@ export const parse = <T extends Node>(
   for (const line of lines) {
     const name = line.trim()
     if (!name) continue
-    const tab = count(line, " ", ch => ch !== " ")
+    const tab = countWS(line)
 
     if (tab > currentTab) {
       currentTab = tab
@@ -52,14 +56,34 @@ export const parse = <T extends Node>(
     if (tab === 0) {
       root.children.push(node)
       currentTab = 0
-    } else {
+    } else if (tab === currentTab) {
       const children = currentParent.children || []
       children.push(node)
       currentParent.children = children
+      Object.defineProperty(node, "parent", {
+        value: currentParent,
+        enumerable: false
+      })
+      Object.defineProperty(node, "tab", {
+        value: tab,
+        enumerable: false
+      })
+    } else if (tab < currentTab) {
+      const parent = getParent(currentParent, tab) || root
+      parent.children.push(node)
     }
 
     prevNode = node
   }
 
   return root
+}
+
+const getParent = (node: Node, tab: number) => {
+  let nodeTab = node.tab
+  while (nodeTab >= tab) {
+    nodeTab = node.tab
+    node = node.parent
+  }
+  return node
 }

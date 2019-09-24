@@ -8,9 +8,12 @@ parent1
 
 parent2
   child1
-  child 2
   
+  child 2
+
   child3
+    child3_1
+    child3_2
   
 parent3
   child1
@@ -44,7 +47,17 @@ parent3
             },
             {
               name: "child3",
-              test: "test"
+              test: "test",
+              children: [
+                {
+                  name: "child3_1",
+                  test: "test"
+                },
+                {
+                  name: "child3_2",
+                  test: "test"
+                }
+              ]
             }
           ]
         },
@@ -68,7 +81,11 @@ parent3
     }
 
     expect(
-      parse(code, n => ({ name: n.name, children: n.children, test: "test" }))
+      parse(code, n => {
+        const node = { name: n.name, test: "test" }
+        if (n.children) node["children"] = n.children
+        return node
+      })
     ).toEqual(tree)
   })
 })
