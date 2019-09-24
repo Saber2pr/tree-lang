@@ -2,7 +2,7 @@
  * @Author: saber2pr
  * @Date: 2019-09-23 13:32:48
  * @Last Modified by: saber2pr
- * @Last Modified time: 2019-09-24 20:30:15
+ * @Last Modified time: 2019-09-24 21:12:37
  */
 export const count = (
   str: string,
@@ -60,8 +60,8 @@ export const parse = <T extends Node>(
     children: []
   })
 
-  let currentParent = root
-  let prevNode: T = null
+  let currentParent: Node = root
+  let prevNode: Node = null
   let currentTab = 0
 
   for (const line of lines) {
@@ -74,20 +74,21 @@ export const parse = <T extends Node>(
       currentParent = prevNode
     }
 
-    const node = mapper(
-      setMeta<Node>({ name }, ["parent", currentParent], ["tab", tab])
-    )
+    const node = { name }
 
     if (tab === 0) {
-      root.children.push(node)
+      setMeta<Node>(node, ["parent", root], ["tab", 0])
+      root.children.push(mapper(node))
       currentTab = 0
     } else if (tab === currentTab) {
       const children = currentParent.children || []
-      children.push(node)
+      setMeta<Node>(node, ["parent", currentParent], ["tab", tab])
+      children.push(mapper(node))
       currentParent.children = children
     } else if (tab < currentTab) {
       const parent = getParent(currentParent, tab)
-      parent.children.push(node)
+      setMeta<Node>(node, ["parent", parent], ["tab", tab])
+      parent.children.push(mapper(node))
       currentTab = tab
     }
 
@@ -95,4 +96,15 @@ export const parse = <T extends Node>(
   }
 
   return root
+}
+
+export const getAbsPath = (n: Node, slash = "/") => {
+  let result = ""
+  let node = n.parent
+  while (node) {
+    if (node.name === "root") break
+    result = `${node.name}${slash}` + result
+    node = node.parent
+  }
+  return result + n.name
 }

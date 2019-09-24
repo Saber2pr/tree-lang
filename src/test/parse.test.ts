@@ -1,4 +1,4 @@
-import parse from ".."
+import { parse, getAbsPath } from ".."
 
 describe("parser", () => {
   it("test1", () => {
@@ -70,5 +70,47 @@ Git版本控制
     }
 
     expect(parse(code)).toEqual(tree)
+  })
+
+  it("test path", () => {
+    const code = `
+node1
+  node1_1
+    node1_1_1
+  node1_2`
+
+    const tree = {
+      name: "root",
+      children: [
+        {
+          name: "node1",
+          path: "node1",
+          children: [
+            {
+              name: "node1_1",
+              path: "node1/node1_1",
+              children: [
+                {
+                  name: "node1_1_1",
+                  path: "node1/node1_1/node1_1_1"
+                }
+              ]
+            },
+            {
+              name: "node1_2",
+              path: "node1/node1_2"
+            }
+          ]
+        }
+      ],
+      path: "root"
+    }
+
+    expect(
+      parse(code, n => {
+        n.path = getAbsPath(n)
+        return n
+      })
+    ).toEqual(tree)
   })
 })
