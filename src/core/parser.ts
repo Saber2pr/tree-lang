@@ -2,7 +2,7 @@
  * @Author: saber2pr
  * @Date: 2019-09-23 13:32:48
  * @Last Modified by: saber2pr
- * @Last Modified time: 2019-09-24 16:31:13
+ * @Last Modified time: 2019-09-24 20:30:15
  */
 export const count = (
   str: string,
@@ -67,12 +67,15 @@ export const parse = <T extends Node>(
     const name = line.trim()
     if (!name) continue
     const tab = countWS(line)
-    const node = mapper({ name })
 
     if (tab > currentTab) {
       currentTab = tab
       currentParent = prevNode
     }
+
+    const node = mapper(
+      setMeta<Node>({ name }, ["parent", currentParent], ["tab", tab])
+    )
 
     if (tab === 0) {
       root.children.push(node)
@@ -81,7 +84,6 @@ export const parse = <T extends Node>(
       const children = currentParent.children || []
       children.push(node)
       currentParent.children = children
-      setMeta(node, ["parent", currentParent], ["tab", tab])
     } else if (tab < currentTab) {
       const parent = getParent(currentParent, tab)
       parent.children.push(node)
