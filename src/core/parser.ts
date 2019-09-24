@@ -2,7 +2,7 @@
  * @Author: saber2pr
  * @Date: 2019-09-23 13:32:48
  * @Last Modified by: saber2pr
- * @Last Modified time: 2019-09-24 16:04:17
+ * @Last Modified time: 2019-09-24 16:08:23
  */
 export const count = (
   str: string,
@@ -21,7 +21,7 @@ export const count = (
 
 export const countWS = (line: string) => count(line, " ", ch => ch !== " ")
 
-export const setMeta = <T>(target: T, ...metas: [string, any][]): T =>
+export const setMeta = <T>(target: T, ...metas: [keyof T, any][]): T =>
   Object.defineProperties(
     target,
     metas.reduce<PropertyDescriptorMap>(
