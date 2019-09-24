@@ -34,7 +34,7 @@ export const setMeta = <T>(target: T, ...metas: [keyof T, any][]): T =>
   )
 
 export interface Node {
-  name: string
+  name?: string
   children?: this[]
   parent?: this
   tab?: number
