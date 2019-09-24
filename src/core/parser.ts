@@ -2,7 +2,7 @@
  * @Author: saber2pr
  * @Date: 2019-09-23 13:32:48
  * @Last Modified by: saber2pr
- * @Last Modified time: 2019-09-24 16:08:23
+ * @Last Modified time: 2019-09-24 16:31:13
  */
 export const count = (
   str: string,
@@ -43,8 +43,8 @@ export interface Node {
 export const getParent = (node: Node, nodeTab: number) => {
   let tab = node.tab
   while (tab >= nodeTab) {
-    tab = node.tab
     node = node.parent
+    tab = node.tab
   }
   return node
 }
@@ -74,13 +74,16 @@ export const parse = <T extends Node>(
       currentParent = prevNode
     }
 
-    if (tab === currentTab) {
+    if (tab === 0) {
+      root.children.push(node)
+      currentTab = 0
+    } else if (tab === currentTab) {
       const children = currentParent.children || []
       children.push(node)
       currentParent.children = children
       setMeta(node, ["parent", currentParent], ["tab", tab])
     } else if (tab < currentTab) {
-      const parent = getParent(currentParent, tab) || root
+      const parent = getParent(currentParent, tab)
       parent.children.push(node)
       currentTab = tab
     }

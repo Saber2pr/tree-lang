@@ -3,89 +3,72 @@ import parse from ".."
 describe("parser", () => {
   it("test1", () => {
     const code = `
-parent1
-  child1
+CSS层叠样式表
+  flex
+  三角形
+  垂直居中
 
-parent2
-  child1
-  
-  child 2
+Github-API
+  github鉴权1
+  使用github-issue api做评论系统
 
-  child3
-    child3_1
-    child3_2
-  
-parent3
-  child1
-    childd1`
+Git版本控制
+  branch
+    branch1
+    branch2
+  checkout
+`
 
     const tree = {
       name: "root",
-      test: "test",
       children: [
         {
-          name: "parent1",
-          test: "test",
+          name: "CSS层叠样式表",
           children: [
             {
-              name: "child1",
-              test: "test"
+              name: "flex"
+            },
+            {
+              name: "三角形"
+            },
+            {
+              name: "垂直居中"
             }
           ]
         },
         {
-          name: "parent2",
-          test: "test",
+          name: "Github-API",
           children: [
             {
-              name: "child1",
-              test: "test"
+              name: "github鉴权1"
             },
             {
-              name: "child 2",
-              test: "test"
-            },
+              name: "使用github-issue api做评论系统"
+            }
+          ]
+        },
+        {
+          name: "Git版本控制",
+          children: [
             {
-              name: "child3",
-              test: "test",
+              name: "branch",
               children: [
                 {
-                  name: "child3_1",
-                  test: "test"
+                  name: "branch1"
                 },
                 {
-                  name: "child3_2",
-                  test: "test"
+                  name: "branch2"
                 }
               ]
-            }
-          ]
-        },
-        {
-          name: "parent3",
-          test: "test",
-          children: [
+            },
             {
-              name: "child1",
-              test: "test",
-              children: [
-                {
-                  name: "childd1",
-                  test: "test"
-                }
-              ]
+              name: "checkout"
             }
           ]
         }
       ]
     }
 
-    expect(
-      parse(code, n => {
-        const node = { name: n.name, test: "test" }
-        if (n.children) node["children"] = n.children
-        return node
-      })
-    ).toEqual(tree)
+    expect(parse(code)).toEqual(tree)
   })
 })
