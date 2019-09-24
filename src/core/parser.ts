@@ -2,7 +2,7 @@
  * @Author: saber2pr
  * @Date: 2019-09-23 13:32:48
  * @Last Modified by: saber2pr
- * @Last Modified time: 2019-09-24 21:12:37
+ * @Last Modified time: 2019-09-24 22:47:06
  */
 export const count = (
   str: string,
@@ -90,6 +90,7 @@ export const parse = <T extends Node>(
       setMeta<Node>(node, ["parent", parent], ["tab", tab])
       parent.children.push(mapper(node))
       currentTab = tab
+      currentParent = parent
     }
 
     prevNode = node
