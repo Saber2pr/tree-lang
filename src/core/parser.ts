@@ -38,6 +38,7 @@ export interface Node {
   children?: this[]
   parent?: this
   tab?: number
+  [key: string]: any
 }
 
 export const getParent = (node: Node, nodeTab: number) => {
